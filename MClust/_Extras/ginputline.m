@@ -79,6 +79,7 @@ function [x, y] = ginputline(clr)
     set(A,'ButtonDownFcn',bdf)
     set(allchild(A),'ButtonDownFcn',bdf)
     
-    delete(L)   % delete lines    
+    delete(L)   % delete lines  
+    set(F,'Pointer','arrow')
     x = reshape(x,[],1);
     y = reshape(y,[],1);
