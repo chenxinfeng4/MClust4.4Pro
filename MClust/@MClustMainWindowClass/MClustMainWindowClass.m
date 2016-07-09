@@ -239,7 +239,10 @@ classdef MClustMainWindowClass < handle
             % changes settings
             fn = uigetfile('*.mclust', 'Load Profile', 'defaults.mclust');
             if ~isequal(fn, 0)
-                MCS.load(fn);
+                load(fn,'X','-mat');
+                MCD=MClust.GetData();
+                MCD.TText = feval(X.NeuralLoadingFunction, 'get', 'ExpectedExtension');%init load-file type               
+                MCS.load(fn);               
                 self = self.FindCurrentLoadingEngine();
                 Redraw(self)
             end
