@@ -23,4 +23,11 @@ end
 
 % Calculate features
 OK = self.FillFeatures();
+
+% Calculate waveform ylim
+MCS = MClust.GetSettings();
+[~, wv] = feval(MCS.NeuralLoadingFunction,[dn,fn]);
+wv_max = max(wv(:));
+wv_min = min(wv(:));
+MCS.AverageWaveform_ylim = [wv_min, wv_max];
 end
