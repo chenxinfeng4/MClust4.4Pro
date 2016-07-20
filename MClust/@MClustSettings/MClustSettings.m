@@ -29,8 +29,8 @@ classdef (Sealed) MClustSettings < handle
         %AverageWaveform_ylim = [-2100 2100]; % For earlier versions of Cheetah
         
         colors = [];
-        ClusterCutWindow_Marker = 1;
-        ClusterCutWindow_MarkerSize = 1;
+        ClusterCutWindow_Marker = 2;
+        ClusterCutWindow_MarkerSize = 2;
         ClusterCutWindow_MarkerList = {'.','o','x','+','*','s','d','v','^','<','>','p','h'};
         ClusterCutWindow_MarkerSizeList = {1,2,3,4,5,10,15,20,25};
         
@@ -38,7 +38,7 @@ classdef (Sealed) MClustSettings < handle
         CHDrawingAxisWindow_Pos= [500 200 650 650];
         
         % process
-        NeuralLoadingFunction = 'LoadTT_NeuralynxNT'; % Loading Engine
+        NeuralLoadingFunction = 'LoadMAT'; % Loading Engine
         
         FeaturesAvailable = {};
         FeaturesToUse = {'feature_Peak', 'feature_Time'};
@@ -51,7 +51,7 @@ classdef (Sealed) MClustSettings < handle
         StartingClusterType = 'SpikelistCluster';
         
         % load-and-save
-        defaultTText = '.ntt';
+        defaultTText = '.mat';
         defaultFDext = '.fd';
         defaultCLUSText = '.clusters';
         
@@ -75,6 +75,15 @@ classdef (Sealed) MClustSettings < handle
 			else
 				self.colors = colorcube(MClustData.maxClusters+1); 
 			end
+            leadingColors = [0    0.4470    0.7410
+                    0.8500    0.3250    0.0980
+                    0.9290    0.6940    0.1250
+                    0.4940    0.1840    0.5560
+                    0.4660    0.6740    0.1880
+                    0.3010    0.7450    0.9330
+                    0.6350    0.0780    0.1840] ;%MATLAB default ColorOrder
+            self.colors = [leadingColors; self.colors];
+
 			close;
             self.resizeWindows();
             self.FindFeatures();            

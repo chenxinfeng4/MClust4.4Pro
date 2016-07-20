@@ -81,7 +81,7 @@ classdef ManualCutter < MClust.Cutter
             C = feval(['MClust.ClusterTypes.' self.ClusterTypeToAdd]);
             C.setAssociatedCutter(@self.GetCutter);
             C.name = ['Cluster ' num2str(iC,'%02.0f')];
-            C.color = MCS.colors(iC+1,:);			
+            C.color = MCS.colors(iC-1,:);			
             if ~isempty(C)
 				self.Clusters{end+1} = C;
                 self.ReGo();

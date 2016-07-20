@@ -5,8 +5,8 @@ classdef DisplayableCluster < MClust.ClusterTypes.Cluster
         % for display
         hide = false;
         color = [0 0 0];
-        markerSize = 1;
-        marker = '.';
+        markerSize = 2;
+        marker = 'o';
         
         hideButton;
         colorButton;
