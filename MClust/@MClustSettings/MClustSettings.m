@@ -29,8 +29,8 @@ classdef (Sealed) MClustSettings < handle
         %AverageWaveform_ylim = [-2100 2100]; % For earlier versions of Cheetah
         
         colors = [];
-        ClusterCutWindow_Marker = 1;
-        ClusterCutWindow_MarkerSize = 1;
+        ClusterCutWindow_Marker = 2;
+        ClusterCutWindow_MarkerSize = 2;
         ClusterCutWindow_MarkerList = {'.','o','x','+','*','s','d','v','^','<','>','p','h'};
         ClusterCutWindow_MarkerSizeList = {1,2,3,4,5,10,15,20,25};
         
@@ -75,6 +75,7 @@ classdef (Sealed) MClustSettings < handle
 			else
 				self.colors = colorcube(MClustData.maxClusters+1); 
 			end
+
 			close;
             self.resizeWindows();
             self.FindFeatures();            
