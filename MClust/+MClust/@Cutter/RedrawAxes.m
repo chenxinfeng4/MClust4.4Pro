@@ -67,7 +67,7 @@ else % DRAW IT
     
     xlabel(xFeat.name,'interpreter','none');
     ylabel(yFeat.name,'interpreter','none');
-    zoom on
+    %zoom on
     
 end
 
