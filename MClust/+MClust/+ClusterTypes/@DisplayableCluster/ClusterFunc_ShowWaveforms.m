@@ -48,7 +48,7 @@ function RedrawWaveforms()
         h = plot(ax, xrange(:,iCh), squeeze(WVD(r, iCh, :))); % nCh -> iCh ADR 2013-12-12
         if useSelfColor, set(h, 'color', self.color); end
     end
-    set(gca, 'YLim', MCS.AverageWaveform_ylim, 'YTick', [0], 'XTick', []);
+    set(gca, 'YLim', MCS.AverageWaveform_ylim, 'XTick', []);
     title(sprintf('%d waveforms from %s', nToPlot, self.name));
 end
 end
