@@ -24,7 +24,8 @@ end
 
 self.FocusOnAxes();
 
-[xg,yg] = ginput();
+[xg,yg] = ginputline();%ginput with line hints.
+%[xg,yg] = ginput();
 %[xg,yg] = ginputSmooth();
 
 xg = [xg;xg(1)]; 
