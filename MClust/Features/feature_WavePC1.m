@@ -1,4 +1,4 @@
-function [wavePCData, wavePCNames, wavePCPar] = feature_WavePC1(V, ttChannelValidity, Params)
+function [wavePCData, wavePCNames, wavePCPar] = feature_WavePC1(V, ttChannelValidity, Params, iPC)
 
 % MClust
 % [wavePCData, wavePCNames, wavePCPar] = feature_wavePC1(V, ttChannelValidity, Params)
@@ -28,19 +28,12 @@ function [wavePCData, wavePCNames, wavePCPar] = feature_WavePC1(V, ttChannelVali
 % Version control M3.0.
 
 %%% PARAMETERS:  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-iPC  = 1;    % number of principal component to keep (per channel)
+defaultiPC  = 1;    % number of principal component to keep (per channel)
 norm = 1;    % normalize Waveforms (1) or don't normalize (0)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-switch nargin
-    case 2
-        recalcParams = 1;
-    case 3
-        recalcParams = 0;
-    otherwise
-        error('feature_wavePC1 needs 2 or 3 input arguments');
-end
-
+if ~exist('Params','var');Params =[];end
+recalcParams = isempty(Params);
+if ~exist('iPC','var'); iPC = defaultiPC; end %really number of PC to keep
 
 TTData = V.data();
 [nSpikes, nCh, nSamp] = size(TTData);
@@ -89,7 +82,7 @@ for iC = 1:lf
     wstd=(w-(I*av))./(I*sd);     % standardize data to zero mean and unit variance
     wpc = wstd*pc;               % project data onto principal component axes
     wavePCData(:,iC) = wpc(:,iPC);
-    wavePCNames{iC} = ['WavePC1'  ': ' num2str(f(iC))];
+    wavePCNames{iC} = sprintf('WavePC%d: %d', iPC, f(iC));
 end
 
 end
