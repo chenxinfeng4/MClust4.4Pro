@@ -31,30 +31,46 @@ waveletNames = cell(lf,1);
 waveletPars = {};
 waveletData = zeros(nSpikes, lf);
 cc = zeros(nSpikes, nSamp); %temp data
-for iC = 1:lf
-	for iS=1:nSpikes
-		c = wavedec(squeeze(TTData(iS,iC,:)),scales,'haar');
-		cc(iS,:) = c(:);
-    end
+
+%% persistent data to save effort when calculate Wavelet2~N
+persistent p_TTData p_ttChannelValidity p_waveletData; 
+if ~isequal(p_TTData, TTData) || ~isequal(p_ttChannelValidity,ttChannelValidity) 
+% data changed -> ReCalculate
+    p_TTData = TTData;
+    p_ttChannelValidity = ttChannelValidity;
+    p_waveletData = zeros(nSpikes, lf, nSamp);
     
-    sd = zeros(1,nSamp);
-	for iA=1:nSamp           % KS test for coefficient selection   
-		thr_dist = std(cc(:,iA)) * 3;
-		thr_dist_min = mean(cc(:,iA)) - thr_dist;
-		thr_dist_max = mean(cc(:,iA)) + thr_dist;
-		aux = cc(find(cc(:,iA)>thr_dist_min & cc(:,iA)<thr_dist_max),iA);
-		
-		if length(aux) > 10;
-			[ksstat]=test_ks(aux);
-			sd(iA)=ksstat;
-		else
-			sd(iA)=0;
-		end
-	end
-	[~, ind]=sort(sd);inputs =10;
-	coeff(1:inputs)=ind(nSamp:-1:nSamp-inputs+1);
-	waveletData(:, iC) = cc(:, coeff(iWL));
-	waveletNames{iC} = sprintf('Wavelet%d :%d', iWL, f(iC));
+%% Calculate data
+    for iC = 1:lf
+        for iS=1:nSpikes
+            [c,~] = wavedec(squeeze(TTData(iS,iC,:)),scales,'haar');
+            cc(iS,:) = c(:);
+        end
+
+        sd = zeros(1,nSamp);
+        for iA=1:nSamp           % KS test for coefficient selection   
+            thr_dist = std(cc(:,iA)) * 3;
+            thr_dist_min = mean(cc(:,iA)) - thr_dist;
+            thr_dist_max = mean(cc(:,iA)) + thr_dist;
+            aux = cc( (cc(:,iA)>thr_dist_min & cc(:,iA)<thr_dist_max), iA );
+
+            if length(aux) > 10;
+%                 [ksstat]=test_ks(aux);
+                [~,~,ksstat]=kstest( aux-mean(aux)/std(aux) );
+                sd(iA)=ksstat;
+            else
+                sd(iA)=0;
+            end
+        end
+        [~, ind]=sort(sd, 'descend');
+        p_waveletData(:, iC, :) = cc(:, ind); %trial by chan by efforts
+    end %end for
+end %end if
+
+%% extract form calculated data
+for iC = 1:lf
+    waveletData(:, iC) = squeeze( p_waveletData(:,iC,iWL) );
+    waveletNames{iC} = sprintf('Wavelet%d :%d', iWL, f(iC));
 end
 
 function [KSmax] = test_ks(x)
