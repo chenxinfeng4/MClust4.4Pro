@@ -2,6 +2,11 @@ function [t, wv] = LoadMAT(fn, R, U)
 % Loading enginer for MClust-4.4
 % inspired by 'LoadSEfromCSC.m', 'TDT2MClust.m', 'LoadTDT.m'
 % @Chen xinfeng, 2016-7-8
+%
+% ------------------------FILE FORMAT-------------------------
+% %example.mat, contains 
+% iTime     : a vector, unit (seconds).
+% waveform  : nspikes_by_nchan_by_spikewidth, unit (any).
 
 if nargin == 1 
     % directly load file
